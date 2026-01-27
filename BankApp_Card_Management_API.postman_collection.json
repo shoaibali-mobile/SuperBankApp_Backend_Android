@@ -1,0 +1,1136 @@
+{
+	"info": {
+		"_postman_id": "bankapp-card-api-001",
+		"name": "BankApp Card Management API",
+		"description": "Complete API collection for Credit Cards, Debit Cards, Virtual Cards, Settings, and Transaction Limits",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    var jsonData = pm.response.json();",
+									"    pm.collectionVariables.set(\"token\", jsonData.token);",
+									"    console.log(\"Token saved:\", jsonData.token);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"userID\": \"testuser\",\n  \"password\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						},
+						"description": "Login to get authentication token. Token is automatically saved to collection variable."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Credit Cards",
+			"item": [
+				{
+					"name": "Get All Credit Cards",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    var jsonData = pm.response.json();",
+									"    if (jsonData.data && jsonData.data.cards && jsonData.data.cards[0]) {",
+									"        pm.collectionVariables.set(\"cardId\", jsonData.data.cards[0].id);",
+									"        console.log(\"Card ID saved:\", jsonData.data.cards[0].id);",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/cards/credit",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"cards",
+								"credit"
+							]
+						},
+						"description": "Get all credit cards for the authenticated user"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Credit Card Details",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/cards/credit/{{cardId}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"cards",
+								"credit",
+								"{{cardId}}"
+							]
+						},
+						"description": "Get detailed information about a specific credit card"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Credit Card Limits",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"domesticLimits\": [\n    {\n      \"type\": \"ATM Cash Withdrawal\",\n      \"isEnabled\": true,\n      \"currentLimit\": 34800.0\n    },\n    {\n      \"type\": \"Online\",\n      \"isEnabled\": true,\n      \"currentLimit\": 87000.0\n    },\n    {\n      \"type\": \"Merchant Outlets (POS)\",\n      \"isEnabled\": true,\n      \"currentLimit\": 0.0\n    }\n  ],\n  \"internationalLimits\": [\n    {\n      \"type\": \"ATM Cash Withdrawal\",\n      \"isEnabled\": false,\n      \"currentLimit\": 0.0\n    },\n    {\n      \"type\": \"Online\",\n      \"isEnabled\": false,\n      \"currentLimit\": 0.0\n    },\n    {\n      \"type\": \"Merchant Outlets (POS)\",\n      \"isEnabled\": false,\n      \"currentLimit\": 0.0\n    },\n    {\n      \"type\": \"Contactless Payments\",\n      \"isEnabled\": false,\n      \"currentLimit\": 0.0\n    }\n  ]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/cards/credit/{{cardId}}/limits",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"cards",
+								"credit",
+								"{{cardId}}",
+								"limits"
+							]
+						},
+						"description": "Update transaction limits for a credit card"
+					},
+					"response": []
+				},
+				{
+					"name": "Enable Autopay",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"amountOption\": \"Total Due\",\n  \"linkedAccountId\": \"account-uuid\",\n  \"autoPayEnabled\": true\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/cards/credit/{{cardId}}/autopay",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"cards",
+								"credit",
+								"{{cardId}}",
+								"autopay"
+							]
+						},
+						"description": "Enable autopay for a credit card"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Autopay",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"amountOption\": \"Minimum Due\",\n  \"linkedAccountId\": \"account-uuid\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/cards/credit/{{cardId}}/autopay",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"cards",
+								"credit",
+								"{{cardId}}",
+								"autopay"
+							]
+						},
+						"description": "Update autopay settings for a credit card"
+					},
+					"response": []
+				},
+				{
+					"name": "Disable Autopay",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/cards/credit/{{cardId}}/autopay",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"cards",
+								"credit",
+								"{{cardId}}",
+								"autopay"
+							]
+						},
+						"description": "Disable autopay for a credit card"
+					},
+					"response": []
+				},
+				{
+					"name": "Update PIN",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"newPIN\": \"1234\",\n  \"confirmPIN\": \"1234\",\n  \"termsAccepted\": true\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/cards/credit/{{cardId}}/pin",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"cards",
+								"credit",
+								"{{cardId}}",
+								"pin"
+							]
+						},
+						"description": "Update credit card PIN"
+					},
+					"response": []
+				},
+				{
+					"name": "Request Add-on Card",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"customerID\": \"CUST123456\",\n  \"nameOnCard\": \"Jane Doe\",\n  \"dateOfBirth\": \"1990-05-15\",\n  \"relationship\": \"Spouse\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/cards/credit/{{cardId}}/addon",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"cards",
+								"credit",
+								"{{cardId}}",
+								"addon"
+							]
+						},
+						"description": "Request an add-on card for a family member"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Debit Cards",
+			"item": [
+				{
+					"name": "Get All Debit Cards",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/cards/debit",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"cards",
+								"debit"
+							]
+						},
+						"description": "Get all debit cards for the authenticated user"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Debit Card Details",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/cards/debit/{{cardId}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"cards",
+								"debit",
+								"{{cardId}}"
+							]
+						},
+						"description": "Get detailed information about a specific debit card"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Debit Card Limits",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"domesticLimits\": [\n    {\n      \"type\": \"ATM Cash Withdrawal\",\n      \"isEnabled\": true,\n      \"currentLimit\": 50000.0\n    },\n    {\n      \"type\": \"Online\",\n      \"isEnabled\": true,\n      \"currentLimit\": 100000.0\n    }\n  ],\n  \"internationalLimits\": [\n    {\n      \"type\": \"ATM Cash Withdrawal\",\n      \"isEnabled\": false,\n      \"currentLimit\": 0.0\n    }\n  ]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/cards/debit/{{cardId}}/limits",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"cards",
+								"debit",
+								"{{cardId}}",
+								"limits"
+							]
+						},
+						"description": "Update transaction limits for a debit card"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Debit Card PIN",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"newPIN\": \"1234\",\n  \"confirmPIN\": \"1234\",\n  \"termsAccepted\": true\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/cards/debit/{{cardId}}/pin",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"cards",
+								"debit",
+								"{{cardId}}",
+								"pin"
+							]
+						},
+						"description": "Update debit card PIN"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Virtual Cards",
+			"item": [
+				{
+					"name": "Get All Virtual Cards",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/cards/virtual",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"cards",
+								"virtual"
+							]
+						},
+						"description": "Get all virtual cards for the authenticated user"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Virtual Card",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nickname\": \"Netflix Subscription\",\n  \"spendingLimit\": 5000.0,\n  \"cardType\": \"Visa\",\n  \"expiryPeriod\": \"3 Months\",\n  \"customExpiryDate\": null,\n  \"linkedAccountId\": \"account-uuid\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/cards/virtual",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"cards",
+								"virtual"
+							]
+						},
+						"description": "Create a new virtual card"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Virtual Card Details",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/cards/virtual/{{cardId}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"cards",
+								"virtual",
+								"{{cardId}}"
+							]
+						},
+						"description": "Get detailed information about a specific virtual card"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Virtual Card",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nickname\": \"Updated Nickname\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/cards/virtual/{{cardId}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"cards",
+								"virtual",
+								"{{cardId}}"
+							]
+						},
+						"description": "Update virtual card details (e.g., nickname)"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Spending Limit",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"spendingLimit\": 10000.0\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/cards/virtual/{{cardId}}/spending-limit",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"cards",
+								"virtual",
+								"{{cardId}}",
+								"spending-limit"
+							]
+						},
+						"description": "Update the spending limit for a virtual card"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Card Status",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"status\": \"Frozen\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/cards/virtual/{{cardId}}/status",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"cards",
+								"virtual",
+								"{{cardId}}",
+								"status"
+							]
+						},
+						"description": "Update virtual card status (Active, Frozen, or Cancelled)"
+					},
+					"response": []
+				},
+				{
+					"name": "Regenerate Card",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/cards/virtual/{{cardId}}/regenerate",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"cards",
+								"virtual",
+								"{{cardId}}",
+								"regenerate"
+							]
+						},
+						"description": "Regenerate card number and CVV for security"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Transactions",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/cards/virtual/{{cardId}}/transactions?page=1&limit=20&startDate=2024-01-01&endDate=2024-01-31",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"cards",
+								"virtual",
+								"{{cardId}}",
+								"transactions"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "20"
+								},
+								{
+									"key": "startDate",
+									"value": "2024-01-01"
+								},
+								{
+									"key": "endDate",
+									"value": "2024-01-31"
+								}
+							]
+						},
+						"description": "Get transactions for a virtual card with pagination and date filtering"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Virtual Card",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/cards/virtual/{{cardId}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"cards",
+								"virtual",
+								"{{cardId}}"
+							]
+						},
+						"description": "Delete a virtual card permanently"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Card Settings",
+			"item": [
+				{
+					"name": "Get All Settings",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/cards/settings",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"cards",
+								"settings"
+							]
+						},
+						"description": "Get all card settings for the authenticated user"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Default Cards",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"defaultCreditCardId\": \"uuid\",\n  \"defaultDebitCardId\": \"uuid\",\n  \"defaultVirtualCardId\": \"uuid\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/cards/settings/default",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"cards",
+								"settings",
+								"default"
+							]
+						},
+						"description": "Update default card selections"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Security Settings",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"contactlessPaymentsEnabled\": true,\n  \"internationalUsageEnabled\": true,\n  \"onlineTransactionsEnabled\": true,\n  \"atmWithdrawalsEnabled\": true\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/cards/settings/security",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"cards",
+								"settings",
+								"security"
+							]
+						},
+						"description": "Update security settings for card transactions"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Global Limits",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"defaultDailyLimit\": 50000.0,\n  \"defaultMonthlyLimit\": 200000.0\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/cards/settings/global-limits",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"cards",
+								"settings",
+								"global-limits"
+							]
+						},
+						"description": "Update global transaction limits"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Notification Settings",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"transactionNotificationsEnabled\": true,\n  \"notificationPreferences\": [\"SMS\", \"Email\", \"Push Notification\"],\n  \"transactionAmountThreshold\": 1000.0,\n  \"internationalTransactionAlerts\": true\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/cards/settings/notifications",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"cards",
+								"settings",
+								"notifications"
+							]
+						},
+						"description": "Update notification preferences"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Statement Settings",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"statementDelivery\": \"Email\",\n  \"statementFrequency\": \"Monthly\",\n  \"eStatementEnabled\": true\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/cards/settings/statement",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"cards",
+								"settings",
+								"statement"
+							]
+						},
+						"description": "Update statement preferences"
+					},
+					"response": []
+				},
+				{
+					"name": "Update PIN Settings",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"pinForContactlessEnabled\": false\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/cards/settings/pin",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"cards",
+								"settings",
+								"pin"
+							]
+						},
+						"description": "Update PIN preferences"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Authentication Settings",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"biometricAuthenticationEnabled\": true,\n  \"twoFactorAuthenticationEnabled\": false,\n  \"transactionAuthenticationRequired\": true\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/cards/settings/authentication",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"cards",
+								"settings",
+								"authentication"
+							]
+						},
+						"description": "Update authentication settings"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Transaction Limits",
+			"item": [
+				{
+					"name": "Get Transaction Limits",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/cards/{{cardId}}/limits",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"cards",
+								"{{cardId}}",
+								"limits"
+							]
+						},
+						"description": "Get transaction limits for any card type (credit, debit, or virtual)"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Domestic Limits",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"limits\": [\n    {\n      \"type\": \"ATM Cash Withdrawal\",\n      \"isEnabled\": true,\n      \"currentLimit\": 50000.0\n    },\n    {\n      \"type\": \"Online\",\n      \"isEnabled\": true,\n      \"currentLimit\": 100000.0\n    }\n  ]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/cards/{{cardId}}/limits/domestic",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"cards",
+								"{{cardId}}",
+								"limits",
+								"domestic"
+							]
+						},
+						"description": "Update domestic transaction limits for any card"
+					},
+					"response": []
+				},
+				{
+					"name": "Update International Limits",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"limits\": [\n    {\n      \"type\": \"ATM Cash Withdrawal\",\n      \"isEnabled\": true,\n      \"currentLimit\": 50000.0\n    },\n    {\n      \"type\": \"Online\",\n      \"isEnabled\": true,\n      \"currentLimit\": 100000.0\n    }\n  ]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/cards/{{cardId}}/limits/international",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"cards",
+								"{{cardId}}",
+								"limits",
+								"international"
+							]
+						},
+						"description": "Update international transaction limits for any card"
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8080",
+			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "cardId",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
