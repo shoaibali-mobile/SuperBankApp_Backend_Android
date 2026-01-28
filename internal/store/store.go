@@ -44,29 +44,46 @@ func (s *Store) initDefaultData() {
 	user := &models.User{
 		UserID:      "testuser",
 		Password:    "password123",
-		FullName:    "John Doe",
-		Email:       "john.doe@example.com",
+		FullName:    "Bruce Wayne",
+		Email:       "bruce.wayne@example.com",
 		RequiresPIN: false,
 		RequiresOTP: false,
 	}
 	s.users[user.UserID] = user
 
-	// Create default credit card
-	creditCard := &models.CreditCard{
+	// Create default credit card 1
+	creditCard1 := &models.CreditCard{
 		ID:                models.GenerateID(),
 		CardNumber:        "4532123456789012",
 		CVV:               "***",
 		ExpiryMonth:       12,
 		ExpiryYear:        2026,
-		CardholderName:    "John Doe",
-		CardType:          "Rupay",
-		RewardsPoints:     1250,
-		AvailableCredit:   50000.0,
-		TotalCredit:       100000.0,
-		OutstandingBalance: 50000.0,
+		CardholderName:    "Bruce Wayne",
+		CardType:          "Visa Platinum",
+		RewardsPoints:     5000,
+		AvailableCredit:   500000.0,
+		TotalCredit:       1000000.0,
+		OutstandingBalance: 0.0,
 		UserID:            user.UserID,
 	}
-	s.creditCards[creditCard.ID] = creditCard
+	s.creditCards[creditCard1.ID] = creditCard1
+
+	// Create default credit card 2
+	creditCard2 := &models.CreditCard{
+		ID:                models.GenerateID(),
+		CardNumber:        "5412751234567890",
+		CVV:               "***",
+		ExpiryMonth:       06,
+		ExpiryYear:        2029,
+		CardholderName:    "Bruce Wayne",
+		CardType:          "Mastercard World",
+		RewardsPoints:     2500,
+		AvailableCredit:   250000.0,
+		TotalCredit:       500000.0,
+		OutstandingBalance: 0.0,
+		UserID:            user.UserID,
+	}
+	s.creditCards[creditCard2.ID] = creditCard2
 
 	// Create default debit card
 	debitCard := &models.DebitCard{
@@ -75,7 +92,7 @@ func (s *Store) initDefaultData() {
 		CVV:            "***",
 		ExpiryMonth:    10,
 		ExpiryYear:     2028,
-		CardholderName: "John Doe",
+		CardholderName: "Bruce Wayne",
 		CardType:       "Rupay",
 		AccountNumber:  "50123456789012",
 		BankName:       "HDFC Bank",
@@ -91,7 +108,7 @@ func (s *Store) initDefaultData() {
 		CVV:              "***",
 		ExpiryMonth:      3,
 		ExpiryYear:       2025,
-		CardholderName:   "John Doe",
+		CardholderName:   "Bruce Wayne",
 		CardType:         "Visa",
 		Nickname:         "Netflix Subscription",
 		SpendingLimit:    5000.0,
@@ -105,7 +122,7 @@ func (s *Store) initDefaultData() {
 
 	// Create default card settings
 	settings := &models.CardSettings{
-		DefaultCreditCardID:              creditCard.ID,
+		DefaultCreditCardID:              creditCard1.ID,
 		DefaultDebitCardID:               debitCard.ID,
 		DefaultVirtualCardID:             virtualCard.ID,
 		TransactionNotificationsEnabled: true,

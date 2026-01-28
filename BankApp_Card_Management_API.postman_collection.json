@@ -141,7 +141,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"domesticLimits\": [\n    {\n      \"type\": \"ATM Cash Withdrawal\",\n      \"isEnabled\": true,\n      \"currentLimit\": 34800.0\n    },\n    {\n      \"type\": \"Online\",\n      \"isEnabled\": true,\n      \"currentLimit\": 87000.0\n    },\n    {\n      \"type\": \"Merchant Outlets (POS)\",\n      \"isEnabled\": true,\n      \"currentLimit\": 0.0\n    }\n  ],\n  \"internationalLimits\": [\n    {\n      \"type\": \"ATM Cash Withdrawal\",\n      \"isEnabled\": false,\n      \"currentLimit\": 0.0\n    },\n    {\n      \"type\": \"Online\",\n      \"isEnabled\": false,\n      \"currentLimit\": 0.0\n    },\n    {\n      \"type\": \"Merchant Outlets (POS)\",\n      \"isEnabled\": false,\n      \"currentLimit\": 0.0\n    },\n    {\n      \"type\": \"Contactless Payments\",\n      \"isEnabled\": false,\n      \"currentLimit\": 0.0\n    }\n  ]\n}"
+							"raw": "{\n  \"domesticLimits\": [\n    {\n      \"type\": \"ATM Cash Withdrawal\",\n      \"isEnabled\": true,\n      \"currentLimit\": 100000.0\n    },\n    {\n      \"type\": \"Online\",\n      \"isEnabled\": true,\n      \"currentLimit\": 500000.0\n    },\n    {\n      \"type\": \"Merchant Outlets (POS)\",\n      \"isEnabled\": true,\n      \"currentLimit\": 300000.0\n    }\n  ],\n  \"internationalLimits\": [\n    {\n      \"type\": \"ATM Cash Withdrawal\",\n      \"isEnabled\": true,\n      \"currentLimit\": 50000.0\n    },\n    {\n      \"type\": \"Online\",\n      \"isEnabled\": true,\n      \"currentLimit\": 200000.0\n    },\n    {\n      \"type\": \"Merchant Outlets (POS)\",\n      \"isEnabled\": true,\n      \"currentLimit\": 100000.0\n    },\n    {\n      \"type\": \"Contactless Payments\",\n      \"isEnabled\": true,\n      \"currentLimit\": 10000.0\n    }\n  ]\n}"
 						},
 						"url": {
 							"raw": "{{base_url}}/api/cards/credit/{{cardId}}/limits",
@@ -308,7 +308,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"customerID\": \"CUST123456\",\n  \"nameOnCard\": \"Jane Doe\",\n  \"dateOfBirth\": \"1990-05-15\",\n  \"relationship\": \"Spouse\"\n}"
+							"raw": "{\n  \"customerID\": \"CUST123456\",\n  \"nameOnCard\": \"Alfred Pennyworth\",\n  \"dateOfBirth\": \"1943-05-19\",\n  \"relationship\": \"Butler\"\n}"
 						},
 						"url": {
 							"raw": "{{base_url}}/api/cards/credit/{{cardId}}/addon",
@@ -399,7 +399,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"domesticLimits\": [\n    {\n      \"type\": \"ATM Cash Withdrawal\",\n      \"isEnabled\": true,\n      \"currentLimit\": 50000.0\n    },\n    {\n      \"type\": \"Online\",\n      \"isEnabled\": true,\n      \"currentLimit\": 100000.0\n    }\n  ],\n  \"internationalLimits\": [\n    {\n      \"type\": \"ATM Cash Withdrawal\",\n      \"isEnabled\": false,\n      \"currentLimit\": 0.0\n    }\n  ]\n}"
+							"raw": "{\n  \"domesticLimits\": [\n    {\n      \"type\": \"ATM Cash Withdrawal\",\n      \"isEnabled\": true,\n      \"currentLimit\": 100000.0\n    },\n    {\n      \"type\": \"Online\",\n      \"isEnabled\": true,\n      \"currentLimit\": 200000.0\n    }\n  ],\n  \"internationalLimits\": [\n    {\n      \"type\": \"ATM Cash Withdrawal\",\n      \"isEnabled\": true,\n      \"currentLimit\": 50000.0\n    }\n  ]\n}"
 						},
 						"url": {
 							"raw": "{{base_url}}/api/cards/debit/{{cardId}}/limits",
@@ -858,7 +858,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"defaultDailyLimit\": 50000.0,\n  \"defaultMonthlyLimit\": 200000.0\n}"
+							"raw": "{\n  \"defaultDailyLimit\": 100000.0,\n  \"defaultMonthlyLimit\": 1000000.0\n}"
 						},
 						"url": {
 							"raw": "{{base_url}}/api/cards/settings/global-limits",
@@ -1059,7 +1059,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"limits\": [\n    {\n      \"type\": \"ATM Cash Withdrawal\",\n      \"isEnabled\": true,\n      \"currentLimit\": 50000.0\n    },\n    {\n      \"type\": \"Online\",\n      \"isEnabled\": true,\n      \"currentLimit\": 100000.0\n    }\n  ]\n}"
+      "raw": "{\n  \"limits\": [\n    {\n      \"type\": \"ATM Cash Withdrawal\",\n      \"isEnabled\": true,\n      \"currentLimit\": 100000.0\n    },\n    {\n      \"type\": \"Online\",\n      \"isEnabled\": true,\n      \"currentLimit\": 500000.0\n    }\n  ]\n}"
 						},
 						"url": {
 							"raw": "{{base_url}}/api/cards/{{cardId}}/limits/domestic",
@@ -1094,7 +1094,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"limits\": [\n    {\n      \"type\": \"ATM Cash Withdrawal\",\n      \"isEnabled\": true,\n      \"currentLimit\": 50000.0\n    },\n    {\n      \"type\": \"Online\",\n      \"isEnabled\": true,\n      \"currentLimit\": 100000.0\n    }\n  ]\n}"
+      "raw": "{\n  \"limits\": [\n    {\n      \"type\": \"ATM Cash Withdrawal\",\n      \"isEnabled\": true,\n      \"currentLimit\": 100000.0\n    },\n    {\n      \"type\": \"Online\",\n      \"isEnabled\": true,\n      \"currentLimit\": 500000.0\n    }\n  ]\n}"
 						},
 						"url": {
 							"raw": "{{base_url}}/api/cards/{{cardId}}/limits/international",

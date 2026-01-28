@@ -52,14 +52,16 @@ func (h *LimitsHandler) GetLimits(w http.ResponseWriter, r *http.Request) {
 		// Return default limits structure
 		limits = &models.LimitsRequest{
 			DomesticLimits: []models.TransactionLimit{
-				{Type: "ATM Cash Withdrawal", IsEnabled: true, CurrentLimit: 0, MaxLimit: 0, CanSetLimit: true},
-				{Type: "Online", IsEnabled: true, CurrentLimit: 0, MaxLimit: 0, CanSetLimit: true},
-				{Type: "Merchant Outlets (POS)", IsEnabled: true, CurrentLimit: 0, MaxLimit: 0, CanSetLimit: true},
+				{Type: "ATM Cash Withdrawal", IsEnabled: true, CurrentLimit: 50000, MaxLimit: 100000, CanSetLimit: true},
+				{Type: "Online", IsEnabled: true, CurrentLimit: 200000, MaxLimit: 500000, CanSetLimit: true},
+				{Type: "Merchant Outlets (POS)", IsEnabled: true, CurrentLimit: 150000, MaxLimit: 300000, CanSetLimit: true},
+				{Type: "Contactless", IsEnabled: true, CurrentLimit: 5000, MaxLimit: 10000, CanSetLimit: true},
 			},
 			InternationalLimits: []models.TransactionLimit{
-				{Type: "ATM Cash Withdrawal", IsEnabled: false, CurrentLimit: 0, MaxLimit: 0, CanSetLimit: true},
-				{Type: "Online", IsEnabled: false, CurrentLimit: 0, MaxLimit: 0, CanSetLimit: true},
-				{Type: "Merchant Outlets (POS)", IsEnabled: false, CurrentLimit: 0, MaxLimit: 0, CanSetLimit: true},
+				{Type: "ATM Cash Withdrawal", IsEnabled: false, CurrentLimit: 0, MaxLimit: 50000, CanSetLimit: true},
+				{Type: "Online", IsEnabled: true, CurrentLimit: 100000, MaxLimit: 200000, CanSetLimit: true},
+				{Type: "Merchant Outlets (POS)", IsEnabled: false, CurrentLimit: 0, MaxLimit: 100000, CanSetLimit: true},
+				{Type: "Contactless", IsEnabled: false, CurrentLimit: 0, MaxLimit: 5000, CanSetLimit: true},
 			},
 		}
 	}

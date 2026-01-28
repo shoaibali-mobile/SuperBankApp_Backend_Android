@@ -7,6 +7,7 @@ import (
 
 	"bankapp-microservices/internal/models"
 	"bankapp-microservices/internal/store"
+
 	"github.com/google/uuid"
 )
 
@@ -42,6 +43,28 @@ func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 	user.ExpiryDate = time.Now().Add(24 * time.Hour)
 	h.store.SetToken(token, user.UserID)
 
+	// Format response to match Android expectations: { "user": { ... }, "tokens": { ... } }
+	loginResponse := map[string]interface{}{
+		"user": map[string]interface{}{
+			"id":              user.UserID,
+			"email":           user.Email,
+			"name":            user.FullName,
+			"createdAt":       time.Now().UnixMilli(),
+			"accountStatus":   "ACTIVE",
+			"isEmailVerified": true,
+			"isPhoneVerified": true,
+		},
+		"tokens": map[string]interface{}{
+			"accessToken":  token,
+			"refreshToken": "dummy_refresh_token",
+			"tokenType":    "Bearer",
+			"expiresIn":    86400, // 24 hours in seconds
+			"issuedAt":     time.Now().UnixMilli(),
+		},
+	}
+
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(user)
+	if err := json.NewEncoder(w).Encode(loginResponse); err != nil {
+		respondWithError(w, http.StatusInternalServerError, "Failed to encode response")
+	}
 }
